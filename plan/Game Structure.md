@@ -1,0 +1,41 @@
+```
+RootWindow
+- Act
+	- Scene
+		- Background
+		- Actors
+			- Character
+			- Character
+		- Dialogue: str
+	- Scene
+		- Background
+		- Actors
+			- Character
+			- Character
+		- Dialogue: str
+	- Scene
+		- Background
+		- Actors
+			- Character
+			- Character
+		- Dialogue: str
+- Act
+	- Scene
+		- Background
+		- Actors
+			- Character
+			- Character
+		- Dialogue: str
+	- Scene
+		- Background
+		- Actors
+			- Character
+			- Character
+		- Dialogue: str
+	- Scene
+		- Background
+		- Actors
+			- Character
+			- Character
+		- Dialogue: str
+```

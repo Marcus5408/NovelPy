@@ -1,5 +1,7 @@
 import pygame as pg
 import typing
+import act
+import actor
 
 class Pytale:
     def __init__(self, screen_size: tuple[int, int], title: str) -> None:
@@ -16,3 +18,10 @@ class Pytale:
             self.screen.fill((0, 0, 0))
             pg.display.flip()
         pg.quit()
+    
+    class Scene:
+        def __init__(self, name: str) -> None:
+            self.name = name
+
+        def run(self) -> None:
+            pass

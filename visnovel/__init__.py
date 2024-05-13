@@ -1,7 +1,7 @@
 import pygame as pg
 import typing
-from act import *
-from actor import *
+from .act import *
+from .actor import *
 
 class VisNovel:
     def __init__(self, screen_size: tuple[int, int], title: str) -> None:

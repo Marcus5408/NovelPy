@@ -1,7 +1,7 @@
 import pygame as pg
 import typing
-import act
-import actor
+from act import *
+from actor import *
 
 class Pytale:
     def __init__(self, screen_size: tuple[int, int], title: str) -> None:

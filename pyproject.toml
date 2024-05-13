@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "NovelPy"
+name = "VisNovel"
 version = "0.1.0"
 description = ""
 authors = ["Issac Liu <issac@matchaflavored.site>"]

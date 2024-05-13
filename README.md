@@ -1,4 +1,4 @@
-# PyTale
+# VisNovel
 
 A simple visual novel game engine written in Python and built on Pygame.
 

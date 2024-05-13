@@ -3,7 +3,7 @@ import typing
 from act import *
 from actor import *
 
-class Pytale:
+class VisNovel:
     def __init__(self, screen_size: tuple[int, int], title: str) -> None:
         pg.init()
         self.screen = pg.display.set_mode(screen_size)

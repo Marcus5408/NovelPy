@@ -33,6 +33,7 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Install Pytale
       run: |
+        echo "$PWD"
         python -m pip install ./pytale
     - name: Lint with flake8
       run: |

@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "pytale"
+name = "NovelPy"
 version = "0.1.0"
 description = ""
 authors = ["Issac Liu <issac@matchaflavored.site>"]

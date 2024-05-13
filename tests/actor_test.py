@@ -1,5 +1,5 @@
 import unittest
-from pytale.actor import EmotionState, Character, Actor
+from novelpy.actor import EmotionState, Character, Actor
 
 class TestActorModule(unittest.TestCase):
     def setUp(self):

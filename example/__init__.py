@@ -1,4 +1,4 @@
-import pytale as pt
+import novelpy as pt
 
 class Example:
     def __init__(self):

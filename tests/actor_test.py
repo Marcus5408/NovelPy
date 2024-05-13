@@ -1,5 +1,5 @@
 import unittest
-from novelpy.actor import EmotionState, Character, Actor
+from visnovel.actor import EmotionState, Character, Actor
 
 class TestActorModule(unittest.TestCase):
     def setUp(self):

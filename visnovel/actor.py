@@ -1,3 +1,4 @@
+from math import e
 from typing import Dict, Union, List
 import os
 
@@ -11,7 +12,7 @@ class EmotionState():
             self.image_path = image_path
 
 class Character:
-    def __init__(self, name: str, emotions: List[EmotionState]) -> None:
+    def __init__(self, name: str, emotions: List[EmotionState], default_emotion: str) -> None:
         self.name = name
         self.emotions = {}
         for emotion in emotions:
@@ -19,8 +20,11 @@ class Character:
                 raise KeyError(f"Attempted to define {emotion.emotion} twice for {self.name}.")
             else:
                 self.emotions[emotion.emotion] = emotion.image_path
-        if "default" not in self.emotions:
-            raise KeyError(f"Attempted to define {self.name} without a default emotion.")
+        
+        try:
+            self.emotions["default"] = self.emotions[default_emotion]
+        except KeyError:
+            raise KeyError(f"Attempted to define {self.name}'s default emotion as '{default_emotion}', which does not exist.")
 
 class Actor:
     def __init__(self, name: str, emotions: List[EmotionState]) -> None:

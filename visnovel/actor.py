@@ -12,10 +12,10 @@ class EmotionState():
             self.image_path = image_path
 
 class Character:
-    def __init__(self, name: str, emotions: List[EmotionState], default_emotion: str) -> None:
+    def __init__(self, name: str, emotion_states: List[EmotionState], default_emotion: str) -> None:
         self.name = name
         self.emotions = {}
-        for emotion in emotions:
+        for emotion in emotion_states:
             if emotion.emotion in self.emotions:
                 raise KeyError(f"Attempted to define {emotion.emotion} twice for {self.name}.")
             else:
@@ -33,11 +33,7 @@ class Actor:
         self.current_emotion = None
     
     def set_emotion(self, emotion: str) -> str:
-        try:
-            if emotion not in self.emotions:
-                raise KeyError(f"{emotion} not found in emotions.")
-            else:
-                return self.emotions[emotion]
-        except KeyError as e:
-            print(e)
-            return self.emotions["default"]
+        if emotion not in self.emotions:
+            raise KeyError(f"{emotion} not found in emotions.")
+        else:
+            return self.emotions[emotion]

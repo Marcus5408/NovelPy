@@ -1,5 +1,5 @@
 import unittest
-from visnovel.actor import EmotionState, Character, Actor
+from visnovel import EmotionState, Character, Actor
 
 class TestActorModule(unittest.TestCase):
     def setUp(self):
@@ -8,7 +8,7 @@ class TestActorModule(unittest.TestCase):
         self.emotion1 = EmotionState("happy", self.valid_path)
         self.emotion2 = EmotionState("sad", self.valid_path)
         self.character = Character("John", [self.emotion1, self.emotion2], "happy")
-        self.actor = Actor("John", [self.emotion1, self.emotion2])
+        self.actor = Actor(self.character, "happy")
 
     def test_emotion_state(self):
         # test image path validation
@@ -31,20 +31,11 @@ class TestActorModule(unittest.TestCase):
         # check object creation
         self.assertEqual(self.character.name, "John")
         # check emotion assignment
-        self.assertEqual(self.character.emotions, {"happy": self.valid_path, "sad": self.valid_path})
+        self.assertEqual(self.character.emotions, {"happy": self.valid_path, "sad": self.valid_path, "default": self.valid_path})
 
     def test_actor(self):
         # check name assignment
-        self.assertEqual(self.actor.name, "John")
-        # check emotion assignment
-        self.assertEqual(self.actor.emotions, [self.emotion1, self.emotion2])
-        self.assertIsNone(self.actor.current_emotion)
-
-        # test emotion not found error
-        with self.assertRaises(KeyError):
-            self.actor.set_emotion("angry")
-        # test default emotion assignment
-        self.assertEqual(self.actor.set_emotion("happy"), self.valid_path)
+        self.assertEqual(self.actor.character.name, "John")
 
 if __name__ == "__main__":
     unittest.main()

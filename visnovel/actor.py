@@ -27,13 +27,16 @@ class Character:
             raise KeyError(f"Attempted to define {self.name}'s default emotion as '{default_emotion}', which does not exist.")
 
 class Actor:
-    def __init__(self, name: str, emotions: List[EmotionState]) -> None:
-        self.name = name
-        self.emotions = emotions
-        self.current_emotion = None
+    def __init__(self, character: Character, current_emotion:str) -> None:
+        self.character = character
+        if current_emotion not in self.character.emotions:
+            raise KeyError(f"{current_emotion} not found in emotions.")
+        else:
+            self.current_emotion = current_emotion
+            self.emotion = self.character.emotions[current_emotion]
     
     def set_emotion(self, emotion: str) -> str:
         if emotion not in self.emotions:
             raise KeyError(f"{emotion} not found in emotions.")
         else:
-            return self.emotions[emotion]
+            return self.emotion[emotion]

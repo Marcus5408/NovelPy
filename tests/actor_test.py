@@ -33,9 +33,5 @@ class TestActorModule(unittest.TestCase):
         # check emotion assignment
         self.assertEqual(self.character.emotions, {"happy": self.valid_path, "sad": self.valid_path, "default": self.valid_path})
 
-    def test_actor(self):
-        # check name assignment
-        self.assertEqual(self.actor.character.name, "John")
-
 if __name__ == "__main__":
     unittest.main()

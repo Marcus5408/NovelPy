@@ -1,5 +1,5 @@
-from math import e
-from typing import Dict, Union, List
+import pygame as pg
+from typing import List, Tuple
 import os
 
 class EmotionState():
@@ -11,6 +11,8 @@ class EmotionState():
         else:
             self.image_path = image_path
 
+
+
 class Character:
     def __init__(self, name: str, emotion_states: List[EmotionState], default_emotion: str) -> None:
         self.name = name
@@ -20,23 +22,23 @@ class Character:
                 raise KeyError(f"Attempted to define {emotion.emotion} twice for {self.name}.")
             else:
                 self.emotions[emotion.emotion] = emotion.image_path
+
+                # Define a new function for this emotion
+                def emotion_func(self, emotion=emotion.emotion):
+                    # create pygame surface
+                    surface = pg.image.load(self.emotions[emotion])
+                    # resize the surface
+                    # surface = pg.transform.scale(surface, size)
+                    # display the surface
+                    self.screen.blit(surface, (0, 0))
+
+                # Assign the function as an attribute of this instance
+                setattr(self, emotion.emotion, emotion_func.__get__(self))
         
         try:
             self.emotions["default"] = self.emotions[default_emotion]
         except KeyError:
             raise KeyError(f"Attempted to define {self.name}'s default emotion as '{default_emotion}', which does not exist.")
-
-class Actor:
-    def __init__(self, character: Character, current_emotion:str) -> None:
-        self.character = character
-        if current_emotion not in self.character.emotions:
-            raise KeyError(f"{current_emotion} not found in emotions.")
-        else:
-            self.current_emotion = current_emotion
-            self.emotion = self.character.emotions[current_emotion]
     
-    def set_emotion(self, emotion: str) -> str:
-        if emotion not in self.emotions:
-            raise KeyError(f"{emotion} not found in emotions.")
-        else:
-            return self.emotion[emotion]
+    def __str__(self) -> str:
+        return self.name

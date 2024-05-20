@@ -3,21 +3,9 @@ from typing import List, Tuple
 import os
 
 
-class EmotionState:
-    def __init__(self, emotion: str, image_path: int) -> None:
-        self.emotion = emotion
-        # check if image_path is a valid path
-        if not os.path.exists(image_path):
-            raise FileNotFoundError(
-                f"Attempted to define {emotion} as {image_path}, which does not exist."
-            )
-        else:
-            self.image_path = image_path
-
-
 class Character:
     def __init__(
-        self, name: str, emotion_states: List[EmotionState], default_emotion: str
+        self, name: str, emotion_states: List[dict], default_emotion: str
     ) -> None:
         self.name = name
         self.emotions = {}

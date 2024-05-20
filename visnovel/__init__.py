@@ -1,7 +1,8 @@
 import pygame as pg
 import typing
 from .act import *
-from .actor import *
+from .character import *
+import threading
 
 
 class VisNovel:
@@ -9,6 +10,9 @@ class VisNovel:
         pg.init()
         self.screen = pg.display.set_mode(screen_size)
         pg.display.set_caption(title)
+
+        # async run
+        threading.Thread(target=self.run).start()
 
     def run(self) -> None:
         running = True

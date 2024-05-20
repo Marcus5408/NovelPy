@@ -1,7 +1,8 @@
 import typing
 
+
 class Act:
-    def __init__(self, name:str, description:str, effect):
+    def __init__(self, name: str, description: str, effect):
         self.name = name
         self.description = description
         self.effect = effect

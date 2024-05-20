@@ -3,6 +3,7 @@ import typing
 from .act import *
 from .actor import *
 
+
 class VisNovel:
     def __init__(self, screen_size: tuple[int, int], title: str) -> None:
         pg.init()
@@ -18,7 +19,7 @@ class VisNovel:
             self.screen.fill((0, 0, 0))
             pg.display.flip()
         pg.quit()
-    
+
     class Scene:
         def __init__(self, name: str) -> None:
             self.name = name

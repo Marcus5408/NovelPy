@@ -1,6 +1,7 @@
+from tracemalloc import start
 import pygame as pg
-from typing import Dict
-from act import *
+from typing import Dict, Union
+from scene import *
 from character import *
 import ulid
 
@@ -21,44 +22,24 @@ class VisNovel:
         pg.display.set_caption(self.config["title"])
         self.running = True
         self.game_queue = []
-        self.current_queue = []
-        self.rendered_queue = []
         self.text_screen(bg=(0, 0, 0), name="")
 
+    class RenderableObject:
+        def __init__(self, duration):
+            self.duration = duration
+            self.start_time = pg.time.get_ticks()
+
+        def isActive(self):
+            return pg.time.get_ticks() - self.start_time < self.duration
+
     def mainloop(self) -> None:
+        start = pg.time.get_ticks()
         while self.running:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self.running = False
                     pg.quit()
 
-            if self.game_queue != self.rendered_queue:
-                for action in self.game_queue:
-                    if action["ulid"] not in [
-                        current_action["ulid"] for current_action in self.current_queue
-                    ]:
-                        self.current_queue.append(action)
-
-                for action in self.current_queue:
-                    if action["time_started"] is not None:
-                        if (
-                            pg.time.get_ticks() - action["time_started"]
-                            > action["duration"] * 1000
-                        ):
-                            action = None
-                    self.screen.blit(action["surface"], (0, 0))
-                    action["time_started"] = (
-                        pg.time.get_ticks()
-                        if action["time_started"]
-                        else action["time_started"]
-                    )
-                    pg.display.flip()
-                self.current_queue = [
-                    action for action in self.current_queue if action is not None
-                ]
-
-                # remove actions that have expired from game_queue
-                self.game_queue = []
                 pg.display.flip()
 
     def text_screen(
@@ -89,8 +70,41 @@ class VisNovel:
             }
         )
 
-    def character_screen(self):
-        pass
+    def scene(self,
+        bg: Union[tuple[int, int, int], str] = (0, 0, 0),
+        characters: List[Character] = [],
+    ) -> None:
+        # create new surface the size of screen
+        screen_copy = self.screen.copy()
+        if isinstance(bg, str):
+            bg = pg.image.load(bg)
+            bg = pg.transform.scale(bg, self.config["screen_size"])
+            screen_copy.blit(bg, (0, 0))
+        else:
+            screen_copy.fill(bg)
+        
+        for character in characters:
+            # calculate position: character index in characters param // width of screen
+            x = characters.index(character) * self.config["screen_size"][0] // len(characters)
+            screen_copy.blit(character.emotions[character.emotions["default"]], (x, 0))
+
+    def play_audio(self,
+        audio_path: str,
+        duration: int,
+    ) -> None:
+        # create new surface the size of screen
+        screen_copy = self.screen.copy()
+        screen_copy.fill((0, 0, 0))
+        self.game_queue.append(
+            {
+                "type": "Audio",
+                "ulid": ulid.new(),
+                "audio_path": audio_path,
+                "duration": duration,
+                "time_started": None,
+            }
+        )
+        return None
 
 
 if __name__ == "__main__":

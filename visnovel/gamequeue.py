@@ -5,11 +5,11 @@ class GameQueue:
     def __init__(self):
         self.queue = deque()
 
-    def enqueue(self, item):
+    def append(self, item):
         # Add an item to the end of the queue.
         self.queue.append(item)
 
-    def dequeue(self):
+    def remove(self):
         # Remove and return the item from the start of the queue.
         if self.is_empty():
             return None

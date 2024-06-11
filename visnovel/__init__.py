@@ -3,7 +3,7 @@ import pygame as pg
 from typing import Dict, Union
 from scene import *
 from character import *
-import ulid
+import gamequeue as gq
 
 
 class VisNovel:
@@ -21,7 +21,7 @@ class VisNovel:
         self.screen = pg.display.set_mode(self.config["screen_size"])
         pg.display.set_caption(self.config["title"])
         self.running = True
-        self.game_queue = []
+        self.game_queue = gq.GameQueue()
         self.text_screen(bg=(0, 0, 0), name="")
 
     class RenderableObject:
@@ -40,6 +40,12 @@ class VisNovel:
                     self.running = False
                     pg.quit()
 
+            if not self.game_queue.is_empty():
+                current = self.game_queue.peek()
+                if current["time_started"] is None:
+                    current["time_started"] = pg.time.get_ticks()
+                if not current["surface"].isActive():
+                    self.game_queue.dequeue()
                 pg.display.flip()
 
     def text_screen(
@@ -63,14 +69,14 @@ class VisNovel:
         self.game_queue.append(
             {
                 "type": "TextScreen",
-                "ulid": ulid.new(),
                 "surface": screen_copy,
                 "duration": duration,
                 "time_started": None,
             }
         )
 
-    def scene(self,
+    def scene(
+        self,
         bg: Union[tuple[int, int, int], str] = (0, 0, 0),
         characters: List[Character] = [],
     ) -> None:
@@ -82,13 +88,27 @@ class VisNovel:
             screen_copy.blit(bg, (0, 0))
         else:
             screen_copy.fill(bg)
-        
+
         for character in characters:
             # calculate position: character index in characters param // width of screen
-            x = characters.index(character) * self.config["screen_size"][0] // len(characters)
+            x = (
+                characters.index(character)
+                * self.config["screen_size"][0]
+                // len(characters)
+            )
             screen_copy.blit(character.emotions[character.emotions["default"]], (x, 0))
 
-    def play_audio(self,
+        self.game_queue.append(
+            {
+                "type": "Scene",
+                "surface": screen_copy,
+                "duration": 0,
+                "time_started": None,
+            }
+        )
+
+    def play_audio(
+        self,
         audio_path: str,
         duration: int,
     ) -> None:
@@ -98,7 +118,6 @@ class VisNovel:
         self.game_queue.append(
             {
                 "type": "Audio",
-                "ulid": ulid.new(),
                 "audio_path": audio_path,
                 "duration": duration,
                 "time_started": None,

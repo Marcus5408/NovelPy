@@ -42,10 +42,10 @@ class VisNovel:
 
             if not self.game_queue.is_empty():
                 current = self.game_queue.peek()
-                if current["time_started"] is None:
+                if current["time_started"] is 0:
                     current["time_started"] = pg.time.get_ticks()
-                if not current["surface"].isActive():
-                    self.game_queue.dequeue()
+                elif pg.time.get_ticks() - current["time_started"] > current["duration"]:
+                    self.game_queue.remove()
                 pg.display.flip()
 
     def text_screen(
@@ -71,7 +71,7 @@ class VisNovel:
                 "type": "TextScreen",
                 "surface": screen_copy,
                 "duration": duration,
-                "time_started": None,
+                "time_started": 0,
             }
         )
 
@@ -90,22 +90,38 @@ class VisNovel:
             screen_copy.fill(bg)
 
         for character in characters:
+            # scale character image to screen size
+            character.emotions = {
+                key: pg.transform.scale(
+                    pg.image.load(value),
+                    (
+                        int(self.config["screen_size"][1]
+                            * pg.image.load(value).get_width()
+                            // pg.image.load(value).get_height()),
+                        self.config["screen_size"][1]
+                    ),
+                )
+                for key, value in character.emotions.items()
+            }
             # calculate position: character index in characters param // width of screen
             x = (
                 characters.index(character)
                 * self.config["screen_size"][0]
                 // len(characters)
             )
-            screen_copy.blit(character.emotions[character.emotions["default"]], (x, 0))
+            # load character image
+            print(character.emotions["default"])
+            screen_copy.blit(character.emotions["default"], (x, 0))
 
-        self.game_queue.append(
-            {
-                "type": "Scene",
-                "surface": screen_copy,
-                "duration": 0,
-                "time_started": None,
-            }
-        )
+        self.screen.blit(screen_copy, (0, 0))
+        # self.game_queue.append(
+        #     {
+        #         "type": "Scene",
+        #         "surface": screen_copy,
+        #         "duration": 0,
+        #         "time_started": None,
+        #     }
+        # )
 
     def play_audio(
         self,
@@ -129,25 +145,25 @@ class VisNovel:
 if __name__ == "__main__":
     config = {
         "screen_size": (800, 600),
-        "title": "Adventure Novel",
+        "title": "Doki Doki No Club :(",
     }
     vn = VisNovel(config)
-    alice = Character(
-        name="Alice",
+    monika = Character(
+        name="Monika",
         states=[
-            {"emotion": "happy", "image_path": "example/alice_happy.png"},
-            {"emotion": "sad", "image_path": "example/alice_sad.png"},
+            {"emotion": "happy", "image_path": "visnovel/monika_happy.png"},
+            {"emotion": "sad", "image_path": "visnovel/monika_sad.png"},
         ],
         default="happy",
     )
-    bob = Character(
-        name="Bob",
+    monika2 = Character(
+        name="Monika2",
         states=[
-            {"emotion": "happy", "image_path": "example/bob_happy.png"},
-            {"emotion": "sad", "image_path": "example/bob_sad.png"},
+            {"emotion": "happy", "image_path": "visnovel/monika_happy.png"},
+            {"emotion": "sad", "image_path": "visnovel/monika_sad.png"},
         ],
-        default="happy",
+        default="sad",
     )
     vn.text_screen(name="Act 1", duration=5)
-    vn.scene(bg="example/bg.png", characters=[alice, bob])
+    vn.scene(bg="visnovel/bg/class.png", characters=[monika, monika2])
     vn.mainloop()
